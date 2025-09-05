@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Marketing AI Suite - Command Center</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-top: 2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .agent-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .agent-card:hover {
+            transform: translateY(-5px);
+        }
+        .status-active {
+            color: #28a745;
+        }
+        .status-inactive {
+            color: #dc3545;
+        }
+        .suite-title {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .capabilities-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .capabilities-list li {
+            padding: 0.3rem 0;
+        }
+        .capabilities-list i {
+            color: #667eea;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="suite-title">
+            <i class="fas fa-rocket"></i>
+            Digital Marketing AI Suite
+            <br><small>Advanced AI Agent Ecosystem for Enterprise Marketing</small>
+        </h1>
+        
+        <div class="dashboard-container">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h4><i class="fas fa-chart-line"></i> Suite Overview</h4>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h3>{{ agents|length }}</h3>
+                                    <p class="mb-0">AI Agents</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3>{{ agent_statuses.values()|select("equalto", "active")|list|length }}</h3>
+                                    <p class="mb-0">Active</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3>100%</h3>
+                                    <p class="mb-0">Automation</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3>24/7</h3>
+                                    <p class="mb-0">Operation</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for agent_id, agent_config in agents.items() %}
+                <div class="col-lg-6 col-xl-4 mb-4">
+                    <div class="agent-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ agent_config.name }}</h5>
+                            <span class="{% if agent_statuses[agent_id] == 'active' %}status-active{% else %}status-inactive{% endif %}">
+                                <i class="fas {% if agent_statuses[agent_id] == 'active' %}fa-circle{% else %}fa-circle{% endif %}"></i>
+                                {{ agent_statuses[agent_id].title() }}
+                            </span>
+                        </div>
+                        
+                        <p class="text-muted">{{ agent_config.description }}</p>
+                        
+                        <div class="mb-3">
+                            <h6>Key Capabilities:</h6>
+                            <ul class="capabilities-list">
+                                {% for capability in agent_config.capabilities %}
+                                <li><i class="fas fa-check-circle"></i> {{ capability.replace('_', ' ').title() }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">Port: {{ agent_config.port }}</small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <a href="/agent/{{ agent_id }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> Access
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5><i class="fas fa-cogs"></i> Campaign Orchestration</h5>
+                            <p>Coordinate multi-agent campaigns for maximum impact and ROI optimization.</p>
+                            <button class="btn btn-success" onclick="orchestrateCampaign()">
+                                <i class="fas fa-play"></i> Launch Campaign Orchestration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function orchestrateCampaign() {
+            // Demo campaign configuration
+            const campaignConfig = {
+                campaign_id: 'DEMO_CAMPAIGN_' + Date.now(),
+                campaign_name: 'Multi-Agent Marketing Campaign',
+                active_agents: Object.keys({{ agents|tojson }}),
+                business_id: 'DEMO_BUSINESS_001'
+            };
+            
+            fetch('/api/orchestrate-campaign', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(campaignConfig)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Campaign orchestration started! Check console for details.');
+                console.log('Campaign Results:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Campaign orchestration failed. Please check agent availability.');
+            });
+        }
+        
+        // Auto-refresh agent status every 30 seconds
+        setInterval(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
