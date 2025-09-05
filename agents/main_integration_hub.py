@@ -98,6 +98,64 @@ AGENT_SERVICES = {
         'endpoint': '/online-business-development/api/comprehensive-strategy',
         'description': 'Revenue growth and monetization strategies',
         'capabilities': ['lead_generation', 'sales_optimization', 'revenue_growth']
+    },
+    
+    # Wealth Generation & Business Acquisition Suite
+    'client_acquisition_specialist': {
+        'name': 'Client Acquisition Specialist',
+        'port': 5040,
+        'endpoint': '/client-acquisition/api/acquisition-strategy',
+        'description': 'Advanced B2B and B2C client acquisition with multi-channel approach',
+        'capabilities': ['lead_generation', 'client_profiling', 'acquisition_funnels', 'conversion_optimization']
+    },
+    'high_ticket_closer': {
+        'name': 'High Ticket Closer',
+        'port': 5041,
+        'endpoint': '/high-ticket-closer/api/closing-strategy',
+        'description': 'Specialized agent for closing high-value deals ($50K-$1M+)',
+        'capabilities': ['deal_qualification', 'stakeholder_mapping', 'objection_handling', 'negotiation_strategy']
+    },
+    'low_ticket_closer': {
+        'name': 'Low Ticket Closer',
+        'port': 5042,
+        'endpoint': '/low-ticket-closer/api/volume-sales',
+        'description': 'High-volume, low-ticket sales automation ($50-$5K deals)',
+        'capabilities': ['volume_sales_automation', 'quick_qualification', 'urgency_creation', 'conversion_optimization']
+    },
+    'pos_marketing_system': {
+        'name': 'POS Marketing System',
+        'port': 5043,
+        'endpoint': '/pos-marketing/api/system-optimization',
+        'description': 'Advanced point-of-sale and marketing automation for retail and e-commerce',
+        'capabilities': ['transaction_analytics', 'customer_segmentation', 'personalized_marketing', 'loyalty_programs']
+    },
+    'wealth_generation_research': {
+        'name': 'Wealth Generation Research',
+        'port': 5044,
+        'endpoint': '/wealth-research/api/opportunity-analysis',
+        'description': 'AI agent for identifying and analyzing high-profit online opportunities',
+        'capabilities': ['opportunity_scanning', 'market_analysis', 'arbitrage_detection', 'roi_calculation']
+    },
+    'arbitrage_opportunity': {
+        'name': 'Arbitrage Opportunity Agent',
+        'port': 5045,
+        'endpoint': '/arbitrage/api/opportunity-execution',
+        'description': 'Advanced agent for identifying and executing profitable arbitrage opportunities',
+        'capabilities': ['market_scanning', 'price_analysis', 'risk_assessment', 'execution_automation']
+    },
+    'negotiation_mediator': {
+        'name': 'Negotiation & Mediator',
+        'port': 5046,
+        'endpoint': '/negotiation/api/mediation-strategy',
+        'description': 'Advanced AI agent for complex negotiations, conflict resolution, and deal structuring',
+        'capabilities': ['negotiation_strategy', 'conflict_resolution', 'deal_structuring', 'stakeholder_management']
+    },
+    'project_management_suite': {
+        'name': 'Project Management Suite',
+        'port': 5047,
+        'endpoint': '/project-management/api/suite-optimization',
+        'description': 'Comprehensive JIRA, Kanban, SAFe Agile, and Zoom management automation',
+        'capabilities': ['jira_automation', 'kanban_optimization', 'safe_agile_coaching', 'zoom_meeting_management']
     }
 }
 
@@ -215,7 +273,7 @@ class DigitalMarketingSuiteEngine:
         agent_results = {}
         
         # Phase 1: Foundation agents (strategy, brand, research)
-        foundation_agents = ['master_strategist', 'brand_storytelling', 'seo_sem']
+        foundation_agents = ['master_strategist', 'brand_storytelling', 'seo_sem', 'wealth_generation_research']
         foundation_results = self._execute_agent_phase(foundation_agents, config, {})
         agent_results.update(foundation_results)
         
@@ -228,6 +286,16 @@ class DigitalMarketingSuiteEngine:
         distribution_agents = ['media_buying', 'social_automation', 'business_development']
         distribution_results = self._execute_agent_phase(distribution_agents, config, {**foundation_results, **content_results})
         agent_results.update(distribution_results)
+        
+        # Phase 4: Acquisition and closing agents (high-value sales focus)
+        acquisition_agents = ['client_acquisition_specialist', 'high_ticket_closer', 'low_ticket_closer', 'arbitrage_opportunity']
+        acquisition_results = self._execute_agent_phase(acquisition_agents, config, {**foundation_results, **content_results, **distribution_results})
+        agent_results.update(acquisition_results)
+        
+        # Phase 5: Operations and management agents
+        operations_agents = ['pos_marketing_system', 'negotiation_mediator', 'project_management_suite']
+        operations_results = self._execute_agent_phase(operations_agents, config, {**foundation_results, **content_results, **distribution_results, **acquisition_results})
+        agent_results.update(operations_results)
         
         return agent_results
     
